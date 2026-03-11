@@ -19,6 +19,16 @@ const HomepageContentSchema = new mongoose.Schema({
         subtitle: String,
         cta: { title: String, description: String, button: String, phone: String },
     },
+    whyChooseUs: {
+        badge: String,
+        title: { main: String, highlight: String },
+        description: String,
+        items: [{
+            title: String,
+            description: String,
+            icon: String,
+        }],
+    },
     howWeWork: {
         badge: String,
         title: { text: String, prefix: String },

@@ -2,14 +2,20 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Testimonial from '@/models/Testimonial';
 import { getAuthUser } from '@/lib/auth';
+import { checkRateLimit } from '@/lib/rateLimit';
+import { sanitizeObject } from '@/lib/sanitize';
 
-export async function PUT(request, { params }) {
+export async function PUT(request, context) {
+    const rateLimited = checkRateLimit(request, { maxRequests: 10, windowMs: 60000 });
+    if (rateLimited) return rateLimited;
+
     try {
         const user = await getAuthUser();
         if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         await connectDB();
-        const body = await request.json();
-        const testimonial = await Testimonial.findByIdAndUpdate(params.id, body, { new: true, runValidators: true });
+        const { id } = await context.params;
+        const body = sanitizeObject(await request.json());
+        const testimonial = await Testimonial.findByIdAndUpdate(id, body, { new: true, runValidators: true });
         if (!testimonial) return NextResponse.json({ error: 'Not found' }, { status: 404 });
         return NextResponse.json({ testimonial });
     } catch (error) {
@@ -17,12 +23,16 @@ export async function PUT(request, { params }) {
     }
 }
 
-export async function DELETE(request, { params }) {
+export async function DELETE(request, context) {
+    const rateLimited = checkRateLimit(request, { maxRequests: 10, windowMs: 60000 });
+    if (rateLimited) return rateLimited;
+
     try {
         const user = await getAuthUser();
         if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         await connectDB();
-        const testimonial = await Testimonial.findByIdAndDelete(params.id);
+        const { id } = await context.params;
+        const testimonial = await Testimonial.findByIdAndDelete(id);
         if (!testimonial) return NextResponse.json({ error: 'Not found' }, { status: 404 });
         return NextResponse.json({ message: 'Deleted successfully' });
     } catch (error) {

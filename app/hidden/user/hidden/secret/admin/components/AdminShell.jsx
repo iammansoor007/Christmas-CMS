@@ -4,15 +4,16 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
+const ADMIN_BASE = '/hidden/user/hidden/secret/admin';
+
 const navItems = [
-    { href: '/admin', label: 'Dashboard', icon: '🏠', exact: true },
-    { href: '/admin/services', label: 'Services', icon: '⚡' },
-    { href: '/admin/homepage', label: 'Homepage', icon: '🏡' },
-    { href: '/admin/pages', label: 'Pages', icon: 'P' },
-    { href: '/admin/testimonials', label: 'Testimonials', icon: '⭐' },
-    { href: '/admin/gallery', label: 'Gallery', icon: '🖼️' },
-    { href: '/admin/recent-work', label: 'Recent Work', icon: '🖼️' },
-    { href: '/admin/settings', label: 'Site Settings', icon: '⚙️' },
+    { href: ADMIN_BASE, label: 'Dashboard', icon: '🏠', exact: true },
+    { href: `${ADMIN_BASE}/services`, label: 'Services', icon: '⚡' },
+    { href: `${ADMIN_BASE}/homepage`, label: 'Homepage', icon: '🏡' },
+    { href: `${ADMIN_BASE}/testimonials`, label: 'Testimonials', icon: '⭐' },
+    { href: `${ADMIN_BASE}/gallery`, label: 'Gallery', icon: '🖼️' },
+    { href: `${ADMIN_BASE}/recent-work`, label: 'Recent Work', icon: '🖼️' },
+    { href: `${ADMIN_BASE}/settings`, label: 'Site Settings', icon: '⚙️' },
 ];
 
 export default function AdminShell({ children }) {
@@ -28,7 +29,7 @@ export default function AdminShell({ children }) {
     const handleLogout = async () => {
         await fetch('/api/auth/logout', { method: 'POST' });
         toast.success('Logged out');
-        router.push('/admin/login');
+        router.push(`${ADMIN_BASE}/login`);
     };
 
     const isActive = (item) =>

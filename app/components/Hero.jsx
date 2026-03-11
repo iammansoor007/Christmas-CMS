@@ -28,17 +28,17 @@ const Hero = () => {
   useEffect(() => {
     setIsMounted(true);
 
-    const loadData = async () => {
+    const load = async () => {
       try {
-        const response = await fetch('/api/homepage');
-        const jsonData = await response.json();
-        setData(jsonData.content);
+        const res = await fetch('/api/homepage', { cache: 'no-store' });
+        const homeD = await res.json();
+        setData(homeD.content);
       } catch (error) {
         console.error('Error loading data:', error);
       }
     };
 
-    loadData();
+    load();
 
     const handleMouseMove = (e) => {
       if (heroRef.current) {

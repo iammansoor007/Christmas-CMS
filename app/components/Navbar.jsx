@@ -274,7 +274,11 @@ const Navbar = () => {
                                         : "bg-dark-navy/50 group-hover/dropdown:bg-holiday-gold/10"
                                       }`}
                                   >
-                                    {dropdownItem.icon}
+                                    {typeof dropdownItem.icon === 'string' && dropdownItem.icon.trim().startsWith('<svg') ? (
+                                      <div dangerouslySetInnerHTML={{ __html: dropdownItem.icon }} className="w-full h-full flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5" />
+                                    ) : (
+                                      dropdownItem.icon
+                                    )}
                                   </div>
 
                                   <div className="flex-1">
@@ -297,7 +301,7 @@ const Navbar = () => {
                                       fill="currentColor"
                                       viewBox="0 0 20 20"
                                     >
-                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 5 1 5 0 004.304.292l3.404-.728c.969-.207 1.69 1.047.921 1.73l-2.597 2.243a1.5 1.5 0 00-.486 1.472l.838 3.514c.22.922-.79 1.668-1.595 1.122l-2.99-1.792a1.5 1.5 0 00-1.488 0l-2.99 1.792c-.805.546-1.815-.2-1.595-1.122l.838-3.514a1.5 1.5 0 00-.486-1.472l-2.597-2.243c-.769-.683-.048-1.937.921-1.73l3.404.728a1 5 1 5 004.304-.292l1.07-3.292z" />
+                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                     </svg>
                                   </div>
                                 </div>
@@ -472,7 +476,11 @@ const Navbar = () => {
                                         : "bg-dark-navy/50 text-warm-white/70 group-hover:bg-holiday-gold/10 group-hover:text-holiday-gold"
                                       }`}
                                   >
-                                    {dropdownItem.icon}
+                                    {typeof dropdownItem.icon === 'string' && dropdownItem.icon.trim().startsWith('<svg') ? (
+                                      <div dangerouslySetInnerHTML={{ __html: dropdownItem.icon }} className="w-full h-full flex items-center justify-center [&>svg]:w-6 [&>svg]:h-6" />
+                                    ) : (
+                                      dropdownItem.icon
+                                    )}
                                   </div>
 
                                   <div className="flex-1">
@@ -500,7 +508,7 @@ const Navbar = () => {
                                       fill="currentColor"
                                       viewBox="0 0 20 20"
                                     >
-                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 5 1 5 0 004.304.292l3.404-.728c.969-.207 1.69 1.047.921 1.73l-2.597 2.243a1.5 1.5 0 00-.486 1.472l.838 3.514c.22.922-.79 1.668-1.595 1.122l-2.99-1.792a1.5 1.5 0 00-1.488 0l-2.99 1.792c-.805.546-1.815-.2-1.595-1.122l.838-3.514a1.5 1.5 0 00-.486-1.472l-2.597-2.243c-.769-.683-.048-1.937.921-1.73l3.404.728a1 5 1 5 004.304-.292l1.07-3.292z" />
+                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                     </svg>
                                   </div>
                                 </div>

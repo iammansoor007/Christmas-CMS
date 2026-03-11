@@ -253,7 +253,8 @@ const Footer = () => {
             </h4>
             <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
               {socialLinks.map((social) => {
-                const IconComponent = iconMap[social.icon] || FaFacebookF;
+                const isSvg = typeof social.icon === 'string' && social.icon.trim().startsWith('<svg');
+                const IconComponent = !isSvg ? (iconMap[social.icon] || FaFacebookF) : null;
                 return (
                   <a
                     key={social.key || social.href}
@@ -263,7 +264,11 @@ const Footer = () => {
                     className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-lg border border-holiday-gold/30 bg-dark-navy/50 backdrop-blur-sm text-holiday-gold hover:bg-gradient-to-r hover:from-holiday-red hover:via-holiday-gold hover:to-holiday-red hover:text-dark-navy transition-all duration-300 flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-holiday-gold/20 text-sm sm:text-base"
                     aria-label={social.label}
                   >
-                    <IconComponent />
+                    {isSvg ? (
+                      <div dangerouslySetInnerHTML={{ __html: social.icon }} className="w-full h-full flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5" />
+                    ) : (
+                      <IconComponent />
+                    )}
                   </a>
                 );
               })}

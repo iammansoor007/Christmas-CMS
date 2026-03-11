@@ -20,7 +20,7 @@ export default function LoginPage() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Login failed');
             toast.success(`Welcome back, ${data.user.name}!`);
-            router.push('/admin');
+            router.push('/hidden/user/hidden/secret/admin');
         } catch (err) {
             toast.error(err.message);
         } finally {

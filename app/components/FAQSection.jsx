@@ -11,11 +11,16 @@ const FAQSection = ({ items: propItems, title: propTitle }) => {
 
   useEffect(() => {
     if (!propItems) {
-      fetch('/api/homepage')
-        .then(r => r.json())
-        .then(d => {
-          if (d.content?.faq) setItems(d.content.faq);
-        });
+      const fetchData = async () => {
+        try {
+          const response = await fetch('/api/homepage', { cache: 'no-store' });
+          const data = await response.json();
+          if (data.content?.faq) setItems(data.content.faq);
+        } catch (error) {
+          console.error("Failed to fetch FAQ data:", error);
+        }
+      };
+      fetchData();
     } else {
       setItems(propItems);
     }

@@ -2,14 +2,18 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import HomepageContent from '@/models/HomepageContent';
 import { getAuthUser } from '@/lib/auth';
+import { checkRateLimit } from '@/lib/rateLimit';
+import { sanitizeObject } from '@/lib/sanitize';
 
 // GET /api/homepage
-export async function GET() {
+export async function GET(request) {
+    const rateLimited = checkRateLimit(request, { maxRequests: 30, windowMs: 60000 });
+    if (rateLimited) return rateLimited;
+
     try {
         await connectDB();
-        let content = await HomepageContent.findOne();
+        let content = await HomepageContent.findOne().lean();
         if (!content) {
-            // Return empty object if not seeded yet
             return NextResponse.json({ content: null });
         }
         return NextResponse.json({ content });
@@ -20,12 +24,15 @@ export async function GET() {
 
 // PUT /api/homepage
 export async function PUT(request) {
+    const rateLimited = checkRateLimit(request, { maxRequests: 10, windowMs: 60000 });
+    if (rateLimited) return rateLimited;
+
     try {
         const user = await getAuthUser();
         if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         await connectDB();
-        const body = await request.json();
+        const body = sanitizeObject(await request.json());
 
         const content = await HomepageContent.findOneAndUpdate(
             {},

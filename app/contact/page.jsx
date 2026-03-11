@@ -58,11 +58,7 @@ const DEFAULT_CONTACT = {
       "Take-down & storage"
     ]
   },
-  trustBadge: {
-    rating: "4.9/5",
-    subtitle: "Average rating from 250+ homeowners",
-    note: "Licensed, insured, and background-checked crews"
-  },
+
   contactCard: {
     title: "Need Immediate Help?",
     phoneLabel: "Call us 24/7",
@@ -75,6 +71,22 @@ const INITIAL_FORM_STATE = {
   fname: "", lname: "", email: "", phone: "", address: "", city: "",
   budget: "", notes: "", lightingAreas: { house: false, ground: false, trees: false, shrubs: false }
 };
+
+const BUDGET_OPTIONS = [
+  "$900 - $1200 (Standard Front Rooflines)",
+  "$1200 - $1500",
+  "$1500 - $2500",
+  "$2500 - $4000",
+  "$4000 and up",
+  "Give me your best lighting design, money is not a factor."
+];
+
+const LIGHTING_AREAS = [
+  { id: "house", label: "House", emoji: "🏠" },
+  { id: "ground", label: "Ground Lighting", emoji: "✨" },
+  { id: "trees", label: "Trees", emoji: "🌲" },
+  { id: "shrubs", label: "Shrubs / Bushes", emoji: "🌿" }
+];
 
 // Pre-defined classNames for better performance
 const INPUT_CLASSES = "w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 outline-none text-gray-900 placeholder-gray-500";
@@ -343,7 +355,7 @@ const ModernQuoteForm = () => {
           <div className="hidden lg:block space-y-6">
             <BenefitsSection />
             <ContactInfo data={contactInfo} />
-            <TrustBadge />
+
           </div>
         </div>
       </div>
@@ -472,17 +484,7 @@ const ContactInfo = memo(({ data }) => (
   </div>
 ));
 
-ContactInfo.displayName = 'ContactInfo';
-// Trust Badge
-const TrustBadge = memo(() => (
-  <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 text-center">
-    <div className="text-3xl font-bold text-gray-900">4.9/5</div>
-    <div className="text-sm text-gray-600 mt-1">Average rating from 250+ homeowners</div>
-    <div className="text-xs text-gray-500 mt-3">Licensed, insured, and background-checked crews</div>
-  </div>
-));
-
-TrustBadge.displayName = 'TrustBadge';
+ContactInfo.displayName = 'ContactInfo'
 
 
 

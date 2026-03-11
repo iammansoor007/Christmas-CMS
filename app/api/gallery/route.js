@@ -2,8 +2,13 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import GalleryItem from '@/models/GalleryItem';
 import { getAuthUser } from '@/lib/auth';
+import { checkRateLimit } from '@/lib/rateLimit';
+import { sanitizeObject } from '@/lib/sanitize';
 
 export async function GET(request) {
+    const rateLimited = checkRateLimit(request, { maxRequests: 30, windowMs: 60000 });
+    if (rateLimited) return rateLimited;
+
     try {
         await connectDB();
         const { searchParams } = new URL(request.url);
@@ -20,7 +25,8 @@ export async function GET(request) {
         const items = await GalleryItem.find(query)
             .sort({ order: 1, createdAt: -1 })
             .skip((page - 1) * limit)
-            .limit(limit);
+            .limit(limit)
+            .lean();
 
         return NextResponse.json({ items, pagination: { page, limit, total, pages: Math.ceil(total / limit) } });
     } catch (error) {
@@ -29,11 +35,14 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
+    const rateLimited = checkRateLimit(request, { maxRequests: 10, windowMs: 60000 });
+    if (rateLimited) return rateLimited;
+
     try {
         const user = await getAuthUser();
         if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         await connectDB();
-        const body = await request.json();
+        const body = sanitizeObject(await request.json());
         const item = new GalleryItem(body);
         await item.save();
         return NextResponse.json({ item }, { status: 201 });

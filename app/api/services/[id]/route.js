@@ -2,14 +2,18 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Service from '@/models/Service';
 import { getAuthUser } from '@/lib/auth';
+import { checkRateLimit } from '@/lib/rateLimit';
+import { sanitizeObject } from '@/lib/sanitize';
 
 // GET /api/services/[id]
-export async function GET(request, { params }) {
+export async function GET(request, context) {
+    const rateLimited = checkRateLimit(request, { maxRequests: 30, windowMs: 60000 });
+    if (rateLimited) return rateLimited;
+
     try {
         await connectDB();
-        const url = new URL(request.url);
-        const id = params?.id || url.pathname.split('/').pop();
-        const service = await Service.findById(id) || await Service.findOne({ slug: id });
+        const { id } = await context.params;
+        const service = await Service.findById(id).lean() || await Service.findOne({ slug: id }).lean();
         if (!service) return NextResponse.json({ error: 'Service not found' }, { status: 404 });
         return NextResponse.json({ service });
     } catch (error) {
@@ -18,15 +22,17 @@ export async function GET(request, { params }) {
 }
 
 // PUT /api/services/[id]
-export async function PUT(request, { params }) {
+export async function PUT(request, context) {
+    const rateLimited = checkRateLimit(request, { maxRequests: 10, windowMs: 60000 });
+    if (rateLimited) return rateLimited;
+
     try {
         const user = await getAuthUser();
         if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         await connectDB();
-        const body = await request.json();
-        const url = new URL(request.url);
-        const id = params?.id || url.pathname.split('/').pop();
+        const { id } = await context.params;
+        const body = sanitizeObject(await request.json());
 
         // Re-generate slug if title changed and slug not manually set
         if (body.title && !body.slug) {
@@ -46,14 +52,16 @@ export async function PUT(request, { params }) {
 }
 
 // DELETE /api/services/[id]
-export async function DELETE(request, { params }) {
+export async function DELETE(request, context) {
+    const rateLimited = checkRateLimit(request, { maxRequests: 10, windowMs: 60000 });
+    if (rateLimited) return rateLimited;
+
     try {
         const user = await getAuthUser();
         if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         await connectDB();
-        const url = new URL(request.url);
-        const id = params?.id || url.pathname.split('/').pop();
+        const { id } = await context.params;
         const service = await Service.findByIdAndDelete(id)
             || await Service.findOneAndDelete({ slug: id });
         if (!service) return NextResponse.json({ error: 'Service not found' }, { status: 404 });

@@ -16,7 +16,7 @@ const ChristmasLightingSection = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const response = await fetch("/api/homepage");
+        const response = await fetch("/api/homepage", { cache: "no-store" });
         const jsonData = await response.json();
         setData(jsonData.content);
       } catch (error) {

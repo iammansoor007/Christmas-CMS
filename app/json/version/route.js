@@ -1,9 +1,5 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  return NextResponse.json({
-    ok: true,
-    name: 'christmaswebsite',
-    version: '1.0.0',
-  });
+    return NextResponse.json({ version: '1.0.0' });
 }

@@ -12,7 +12,7 @@ export default function ClientLayout({ children }) {
     const [isClient, setIsClient] = useState(false);
     const [snowflakes] = useState(() => {
         const flakes = [];
-        for (let i = 0; i < 120; i++) {
+        for (let i = 0; i < 30; i++) {
             flakes.push({
                 id: i,
                 left: Math.random() * 100,
@@ -28,7 +28,7 @@ export default function ClientLayout({ children }) {
         setIsClient(true);
     }, []);
 
-    const isAdmin = pathname?.startsWith('/admin');
+    const isAdmin = pathname?.startsWith('/hidden/user/hidden/secret/admin');
     if (isAdmin) {
         return (
             <main className="min-h-screen bg-gray-950">

@@ -24,8 +24,8 @@ const AwardWinningServicesSection = () => {
     const load = async () => {
       try {
         const [homeRes, servicesRes] = await Promise.all([
-          fetch('/api/homepage'),
-          fetch('/api/services?limit=10&status=active')
+          fetch('/api/homepage', { cache: 'no-store' }),
+          fetch('/api/services?limit=10&status=active', { cache: 'no-store' })
         ]);
         const homeD = await homeRes.json();
         const servicesD = await servicesRes.json();
@@ -237,6 +237,9 @@ const AwardWinningServicesSection = () => {
                             transition={{ duration: 0.5 }}
                           >
                             {(() => {
+                              if (typeof service.icon === 'string' && service.icon.trim().startsWith('<svg')) {
+                                return <div dangerouslySetInnerHTML={{ __html: service.icon }} className="w-full h-full flex items-center justify-center [&>svg]:w-full [&>svg]:h-full p-2" />;
+                              }
                               const Icon = FaIcons[service.icon] || FaIcons.FaStar;
                               return <Icon />;
                             })()}

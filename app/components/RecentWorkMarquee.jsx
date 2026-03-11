@@ -14,9 +14,9 @@ const RefinedWorkShowcase = () => {
     const loadData = async () => {
       try {
         const [homeRes, recentRes, galleryRes] = await Promise.all([
-          fetch("/api/homepage"),
-          fetch("/api/recent-work?limit=24&status=active"),
-          fetch("/api/gallery?limit=24&status=active")
+          fetch("/api/homepage", { cache: "no-store" }),
+          fetch("/api/recent-work?limit=24&status=active", { cache: "no-store" }),
+          fetch("/api/gallery?limit=24&status=active", { cache: "no-store" })
         ]);
         const homeD = await homeRes.json();
         const recentD = await recentRes.json();

@@ -279,7 +279,7 @@ const Gallery = () => {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const res = await fetch('/api/gallery?limit=100');
+        const res = await fetch('/api/gallery?limit=100', { cache: 'no-store' });
         const data = await res.json();
         if (data.items) {
           const mapped = data.items.map(item => ({

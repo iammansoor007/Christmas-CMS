@@ -120,6 +120,7 @@ export default function HomepagePage() {
         { id: 'hero', label: '🔥 Hero' },
         { id: 'about', label: '📖 About' },
         { id: 'howWeWork', label: '🔧 Process' },
+        { id: 'whyChooseUs', label: '⭐ Why Choose' },
         { id: 'workShowcase', label: 'Recent Work' },
         { id: 'aboutPage', label: '👤 Founder' },
         { id: 'contactPage', label: '📞 Contact Pg' },
@@ -248,6 +249,50 @@ export default function HomepagePage() {
                         </div>
                     )}
 
+
+                    {activeTab === 'whyChooseUs' && (
+                        <div className="space-y-6">
+                            <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Why Choose Us Section</h2>
+                            <Field label="Badge" path="whyChooseUs.badge" />
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <Field label="Main Title" path="whyChooseUs.title.main" />
+                                <Field label="Highlight Title" path="whyChooseUs.title.highlight" />
+                            </div>
+                            <Field label="Description" path="whyChooseUs.description" multiline />
+
+                            <div className="space-y-4 pt-4 border-t border-gray-800">
+                                <h3 className="text-xs font-bold text-gray-500 uppercase">Features</h3>
+                                {(getVal('whyChooseUs.items') || []).map((item, i) => (
+                                    <div key={i} className="p-4 bg-gray-800/50 rounded-xl border border-gray-700 space-y-3">
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <Field label="Icon Code" path={`whyChooseUs.items.${i}.icon`} />
+                                            <Field label="Title" path={`whyChooseUs.items.${i}.title`} />
+                                        </div>
+                                        <Field label="Description" path={`whyChooseUs.items.${i}.description`} multiline />
+                                        <button
+                                            onClick={() => {
+                                                const items = [...content.whyChooseUs.items];
+                                                items.splice(i, 1);
+                                                deepSet('whyChooseUs.items', items);
+                                            }}
+                                            className="text-red-400 text-xs hover:text-red-300"
+                                        >
+                                            Remove Item
+                                        </button>
+                                    </div>
+                                ))}
+                                <button
+                                    onClick={() => {
+                                        const items = [...(content.whyChooseUs?.items || []), { title: '', description: '', icon: 'FaCheckCircle' }];
+                                        deepSet('whyChooseUs.items', items);
+                                    }}
+                                    className="w-full py-2 border border-dashed border-gray-700 rounded-lg text-gray-500 hover:text-amber-500 hover:border-amber-500 text-xs"
+                                >
+                                    + Add Feature
+                                </button>
+                            </div>
+                        </div>
+                    )}
 
                     {activeTab === 'workShowcase' && (
                         <div className="space-y-4">
